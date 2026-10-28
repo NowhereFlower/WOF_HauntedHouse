@@ -121,6 +121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6472079444933309634}
+  - component: {fileID: 7940082485961720761}
   m_Layer: 0
   m_Name: Grass
   m_TagString: Untagged
@@ -152,6 +153,19 @@ Transform:
   - {fileID: 882349585115242874}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7940082485961720761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3471840837769933234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471514477510c924a99c0ba81d10cd43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SCarpet
+  lampPrefab: {fileID: 1939269850386961596, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
 --- !u!1 &3607478431229084756
 GameObject:
   m_ObjectHideFlags: 0

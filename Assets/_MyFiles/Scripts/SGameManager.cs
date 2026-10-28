@@ -1,12 +1,20 @@
+using NUnit.Framework;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SGameManager : MonoBehaviour
 {
     [SerializeField] private Transform character;
+    [SerializeField] private Transform characterModel;
+    [SerializeField] private Transform terrainHolder;
 
-    [SerializeField] private float moveDur = 0.2f;
+    [SerializeField] private SCarpet carpetPrefab;
+    [SerializeField] private float moveDuration = 0.2f;
+    [SerializeField] private int spawnDistance = 20;
 
     enum GameState
     {
@@ -17,6 +25,8 @@ public class SGameManager : MonoBehaviour
 
     private GameState gamestate;
     private Vector2Int characterPos;
+    private int spawnLocation;
+    private List<(float terrainHeight, HashSet<int> locations)> obstacles = new();
 
     private void Awake()
     {
@@ -29,12 +39,32 @@ public class SGameManager : MonoBehaviour
 
         characterPos = new Vector2Int(0, -1);
         character.position = new Vector3(0, 0.2f, -1);
+
+        obstacles.Clear();
+        foreach(Transform child in terrainHolder)
+        {
+            Destroy(child.gameObject);
+        }
+
+        spawnLocation = 0;
+        for(int i = 0; i < spawnDistance; i++)
+        {
+            SpawnObstacle();
+        }
+    }
+
+    private void SpawnObstacle()
+    {
+        SCarpet carpet = Instantiate(carpetPrefab, terrainHolder);
+        obstacles.Add((0.2f, carpet.Init(spawnLocation)));
+
+        spawnLocation++;
     }
 
 
     private bool InStartArea(Vector2Int location)
     {
-        if((location.y > -5) && (location.y < 0) && (location.x < -6) && (location.x < 6))
+        if((location.y > -5) && (location.y < 0) && (location.x > -6) && (location.x < 6))
         {
             return true;
         }
@@ -72,14 +102,22 @@ public class SGameManager : MonoBehaviour
             {
                 Vector2Int destination = characterPos + moveDirection;
 
-                if (InStartArea(destination))
+                if (InStartArea(destination) || ((destination.y >= 0) && !obstacles[destination.y].locations.Contains(destination.x)))
                 {
                     characterPos = destination;
 
                     StartCoroutine(IMoveCharacter());
                 }
+                while(obstacles.Count < (characterPos.y + spawnDistance))
+                {
+                    SpawnObstacle();
+                }
             }
         }
+
+        Vector3 cameraPos = new(character.position.x + 2, 4, character.position.z - 3);
+        cameraPos.x = Mathf.Clamp(cameraPos.x, -1, 5);
+        Camera.main.transform.position = cameraPos;
     }
 
     private IEnumerator IMoveCharacter()
@@ -90,18 +128,24 @@ public class SGameManager : MonoBehaviour
         float yHeight = 0.2f;
         Vector3 startPos = character.position;
         Vector3 endPos = new(characterPos.x, yHeight, characterPos.y);
-
-        while(elapsedTime < moveDur)
+        Quaternion startRotation = characterModel.localRotation;
+        while(elapsedTime < moveDuration)
         {
-            float percent = elapsedTime / moveDur;
+            float percent = elapsedTime / moveDuration;
             Vector3 newPos = Vector3.Lerp(startPos, endPos, percent);
+            newPos.y = yHeight + (0.5f * Mathf.Sin(Mathf.PI * percent));
+
             character.position = newPos;
+
+            Vector3 rotation = characterModel.localRotation.eulerAngles;
+            characterModel.localRotation = Quaternion.Euler(-5f * Mathf.PI * Mathf.Cos(Mathf.PI * percent), rotation.y, rotation.z);
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         character.position = endPos;
+        characterModel.localRotation = startRotation;
 
         if(gamestate == GameState.Moving)
         {
