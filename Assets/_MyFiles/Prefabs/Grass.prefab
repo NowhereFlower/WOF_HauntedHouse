@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 463112168753666455}
   - component: {fileID: 9085467132281220768}
   - component: {fileID: 2479852534387369158}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6472079444933309634}
   - component: {fileID: 7940082485961720761}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Grass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 471514477510c924a99c0ba81d10cd43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SCarpet
-  lampPrefab: {fileID: 1939269850386961596, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
+  lampPrefab: {fileID: 7653352345804678392, guid: 16781257d64bef643a5a15220e6cb72d, type: 3}
 --- !u!1 &3607478431229084756
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 6054208908852533661}
   - component: {fileID: 7123520033689150413}
   - component: {fileID: 8424816926543838378}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -290,7 +290,7 @@ GameObject:
   - component: {fileID: 1676862191379540070}
   - component: {fileID: 293175032910288673}
   - component: {fileID: 2383207412646359071}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,6 +442,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: light_tall (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6209874504832809163, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -507,6 +511,10 @@ PrefabInstance:
     - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: m_Name
       value: light_tall (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6209874504832809163, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -574,6 +582,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: light_tall (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6209874504832809163, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -639,6 +651,10 @@ PrefabInstance:
     - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: m_Name
       value: light_tall (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6209874504832809163, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -706,6 +722,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: light_tall (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6209874504832809163, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -771,6 +791,10 @@ PrefabInstance:
     - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: m_Name
       value: light_tall
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770286674447967998, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6209874504832809163, guid: 6f0b3353792664245b8b0f24ee37a48f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

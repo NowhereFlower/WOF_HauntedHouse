@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -5,16 +6,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = System.Random;
 
 public class SGameManager : MonoBehaviour
 {
     [SerializeField] private Transform character;
     [SerializeField] private Transform characterModel;
     [SerializeField] private Transform terrainHolder;
+    [SerializeField] private TMPro.TextMeshProUGUI scoreText;
+    [SerializeField] private GameObject panel;
 
     [SerializeField] private SCarpet carpetPrefab;
+    [SerializeField] private SRoad roadPrefab;
     [SerializeField] private float moveDuration = 0.2f;
     [SerializeField] private int spawnDistance = 20;
+    private int score = 0;
 
     enum GameState
     {
@@ -26,19 +32,26 @@ public class SGameManager : MonoBehaviour
     private GameState gamestate;
     private Vector2Int characterPos;
     private int spawnLocation;
-    private List<(float terrainHeight, HashSet<int> locations)> obstacles = new();
+    private List<(float terrainHeight, HashSet<int> locations, GameObject obj)> obstacles = new();
+
+
 
     private void Awake()
     {
+        
         NewLevel();
     }
 
     private void NewLevel()
     {
+        panel.SetActive(true);
         gamestate = GameState.Ready;
 
         characterPos = new Vector2Int(0, -1);
         character.position = new Vector3(0, 0.2f, -1);
+        character.GetComponent<SCharacter>().Reset();
+        score = 0;
+        scoreText.text = "0";
 
         obstacles.Clear();
         foreach(Transform child in terrainHolder)
@@ -55,10 +68,23 @@ public class SGameManager : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        SCarpet carpet = Instantiate(carpetPrefab, terrainHolder);
-        obstacles.Add((0.2f, carpet.Init(spawnLocation)));
+        float roadProbaility = Mathf.Lerp(0.5f, 0.9f, spawnDistance / 250f);
 
-        spawnLocation++;
+        if (UnityEngine.Random.value < roadProbaility)
+        {
+            SRoad road = Instantiate(roadPrefab, terrainHolder);
+            obstacles.Add((0.1f, road.Init(spawnLocation), road.gameObject));
+            road.gameObject.name = $"{spawnLocation} - Road";
+        }
+        else
+        {
+            SCarpet carpet = Instantiate(carpetPrefab, terrainHolder);
+            obstacles.Add((0.2f, carpet.Init(spawnLocation), carpet.gameObject));
+            carpet.gameObject.name = $"{spawnLocation} - Carpet";
+
+        }
+
+            spawnLocation++;
     }
 
 
@@ -107,12 +133,32 @@ public class SGameManager : MonoBehaviour
                     characterPos = destination;
 
                     StartCoroutine(IMoveCharacter());
+                    if((destination.y + 1) > score)
+                    {
+                        score = destination.y + 1;
+                        scoreText.text = $"{score}";
+                    }
                 }
                 while(obstacles.Count < (characterPos.y + spawnDistance))
                 {
                     SpawnObstacle();
+
+                    int oldIndex = characterPos.y - spawnDistance;
+                    if((oldIndex >= 0) && (obstacles[oldIndex].obj != null))
+                    {
+                        Destroy(obstacles[oldIndex].obj);
+                    }
+                }
+
+                if(characterPos.y < (score - 10)){
+                    character.GetComponent<SCharacter>().Kill(character.transform.position + new Vector3(0,0.2f, 0.5f));
                 }
             }
+        }
+
+        if(gamestate == GameState.Dead && Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            NewLevel();
         }
 
         Vector3 cameraPos = new(character.position.x + 2, 4, character.position.z - 3);
@@ -123,9 +169,14 @@ public class SGameManager : MonoBehaviour
     private IEnumerator IMoveCharacter()
     {
         gamestate = GameState.Moving;
+        panel.SetActive(false);
         float elapsedTime = 0f;
 
         float yHeight = 0.2f;
+        if(characterPos.y >= 0)
+        {
+            yHeight = obstacles[characterPos.y].terrainHeight;
+        }
         Vector3 startPos = character.position;
         Vector3 endPos = new(characterPos.x, yHeight, characterPos.y);
         Quaternion startRotation = characterModel.localRotation;
@@ -151,5 +202,11 @@ public class SGameManager : MonoBehaviour
         {
             gamestate = GameState.Ready;
         }
+
+        
+    }
+    public void PlayerCollision()
+    {
+        gamestate = GameState.Dead;
     }
 }
